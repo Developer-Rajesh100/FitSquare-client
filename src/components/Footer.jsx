@@ -3,6 +3,15 @@ import React from "react";
 const Footer = () => {
   return (
     <div>
+      {/* display: grid;
+    width: 100%;
+    grid-auto-flow: row;
+    place-items: start;
+    column-gap: 1rem;
+    row-gap: 2.5rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    justify-items: center; */}
       <footer className="footer bg-base-200 text-base-content p-10">
         <nav>
           <h6 className="footer-title">Services</h6>
