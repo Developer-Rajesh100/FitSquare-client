@@ -1,13 +1,40 @@
 import React from "react";
-import Members from "./Members";
+import Link from "next/link";
 
-const Sidebar = () => {
+const Sidebar = ({ children }) => {
+  const sidenav = [
+    {
+      name: "Dashboard",
+      link: "/staff_panel",
+    },
+    {
+      name: "Members",
+      link: "/staff_panel/members",
+    },
+    {
+      name: "Class",
+      link: "/staff_panel/classes",
+    },
+    {
+      name: "Contact",
+      link: "/staff_panel/contact",
+    },
+    {
+      name: "Membership",
+      link: "/staff_panel/membership",
+    },
+    {
+      name: "Review",
+      link: "/staff_panel/review",
+    },
+  ];
   return (
     <div className="drawer lg:drawer-open">
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col items-center justify-center">
         {/* Page content here */}
-        <Members />
+        {/* <Members /> */}
+        {children}
 
         <label
           htmlFor="my-drawer-2"
@@ -24,12 +51,13 @@ const Sidebar = () => {
         ></label>
         <ul className="menu bg-slate-300 text-base-content min-h-full w-52 p-4">
           {/* Sidebar content here */}
-          <li>
-            <a>Members</a>
-          </li>
-          <li>
-            <a>Sidebar Item 2</a>
-          </li>
+          {sidenav.map((item, index) => {
+            return (
+              <li key={index}>
+                <Link href={item.link}>{item.name}</Link>
+              </li>
+            );
+          })}
         </ul>
       </div>
     </div>
