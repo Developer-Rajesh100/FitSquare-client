@@ -4,7 +4,7 @@ import React from "react";
 const Navbar = () => {
   return (
     <div>
-      <div className="navbar bg-slate-300 fixed">
+      <div className="navbar bg-slate-300 shadow-sm">
         <div className="navbar-start">
           <div className="dropdown">
             <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -28,21 +28,13 @@ const Navbar = () => {
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
             >
               <li>
-                <a>Item 1</a>
+                <Link href={"/"}>Home</Link>
               </li>
               <li>
-                <a>Parent</a>
-                <ul className="p-2">
-                  <li>
-                    <a>Submenu 1</a>
-                  </li>
-                  <li>
-                    <a>Submenu 2</a>
-                  </li>
-                </ul>
+                <Link href={"/registration"}>Registration</Link>
               </li>
               <li>
-                <a>Item 3</a>
+                <Link href={"/login"}>Login</Link>
               </li>
             </ul>
           </div>
@@ -80,7 +72,7 @@ const Navbar = () => {
                 <Link href={"/profile"}>Profile</Link>
               </li>
               <li>
-                <a>Staff Panel</a>
+                <Link href={"/staff_panel"}>Staff Panel</Link>
               </li>
               <li>
                 <a>Logout</a>
