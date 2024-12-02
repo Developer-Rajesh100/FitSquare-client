@@ -1,13 +1,12 @@
 "use client";
 import Image from "next/image";
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [formData, setFormData] = useState({
     username: "",
-    email: "",
     password: "",
-    confirmPassword: "",
   });
 
   const handleChange = (e) => {
@@ -21,15 +20,39 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form Data:", formData);
+    loginUser();
 
     // Reset The Form as empty form
     setFormData({
       username: "",
-      email: "",
       password: "",
-      confirmPassword: "",
     });
   };
+
+  // Login POST Request to the server http://127.0.0.1:8000/member/user/login/
+  const loginUser = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/member/user/login/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log(data);
+      toast.success("User Login Successful!");
+    } catch (error) {
+      console.error("Error:", error.message);
+      toast.error("Login Failed, please try again.");
+    }
+  };
+
   return (
     <div className="flex items-center justify-evenly min-h-screen">
       <div className="">
@@ -59,19 +82,6 @@ const Login = () => {
               required
             />
           </label>
-          <label className="input input-bordered flex items-center gap-2 my-2">
-            Email:
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="grow"
-              placeholder="......."
-              required
-            />
-          </label>
 
           <label className="input input-bordered flex items-center gap-2 my-2 w-full">
             Password:
@@ -80,19 +90,6 @@ const Login = () => {
               id="password"
               name="password"
               value={formData.password}
-              onChange={handleChange}
-              className="grow"
-              placeholder="......."
-              required
-            />
-          </label>
-          <label className="input input-bordered flex items-center gap-2 my-2 w-full">
-            Confirm Password:
-            <input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              value={formData.confirmPassword}
               onChange={handleChange}
               className="grow"
               placeholder="......."

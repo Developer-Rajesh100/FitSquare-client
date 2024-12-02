@@ -7,18 +7,11 @@ const About = () => {
       <h1 className="text-4xl text-center font-semibold mb-10">About Us</h1>
       <div className="flex justify-evenly items-center">
         <div>
-          {/* <Image
-          src="/home_about.jpg"
-          width={300}
-          height={700}
-          alt="About Image"
-        /> */}
-          <img
-            src="/home_about.jpg/"
+          <Image
+            src="/home_about.jpg"
             width={300}
             height={700}
-            alt=""
-            className="rounded-xl"
+            alt="About Image"
           />
         </div>
         <div className="max-w-[50%]">

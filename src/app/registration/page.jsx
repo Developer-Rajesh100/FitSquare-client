@@ -1,15 +1,16 @@
 "use client";
 import Image from "next/image";
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 
 const Register = () => {
   const [formData, setFormData] = useState({
     username: "",
-    firstName: "",
-    lastName: "",
+    first_name: "",
+    last_name: "",
     email: "",
     password: "",
-    confirmPassword: "",
+    confirm_password: "",
   });
 
   const handleChange = (e) => {
@@ -23,16 +24,47 @@ const Register = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formData);
+    console.log(JSON.stringify(formData));
+    registerUser();
 
     // Reset The Form as empty form
     setFormData({
       username: "",
-      firstName: "",
-      lastName: "",
+      first_name: "",
+      last_name: "",
       email: "",
       password: "",
-      confirmPassword: "",
+      confirm_password: "",
     });
+  };
+
+  // Registration POST Request to the server http://127.0.0.1:8000/member/user/registration/
+  const registerUser = async () => {
+    try {
+      const response = await fetch(
+        "http://127.0.0.1:8000/member/user/registration/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log(data);
+      toast.success(
+        "Registration Successful, please check your email to verify your account."
+      );
+    } catch (error) {
+      console.error("Error:", error.message);
+      toast.error("Registration Failed, please try again.");
+    }
   };
 
   return (
@@ -61,9 +93,9 @@ const Register = () => {
               First Name:
               <input
                 type="text"
-                id="firstName"
-                name="firstName"
-                value={formData.firstName}
+                id="first_name"
+                name="first_name"
+                value={formData.first_name}
                 onChange={handleChange}
                 className="grow"
                 placeholder="......."
@@ -74,9 +106,9 @@ const Register = () => {
               Last Name:
               <input
                 type="text"
-                id="lastName"
-                name="lastName"
-                value={formData.lastName}
+                id="last_name"
+                name="last_name"
+                value={formData.last_name}
                 onChange={handleChange}
                 className="grow"
                 placeholder="......."
@@ -97,74 +129,7 @@ const Register = () => {
               required
             />
           </label>
-          {/* <div className="flex gap-4">
-            <label className="input input-bordered flex items-center gap-2 my-2 w-full">
-              Height:
-              <input
-                type="text"
-                className="grow"
-                placeholder="......."
-                required
-              />
-            </label>
-            <label className="input input-bordered flex items-center gap-2 my-2 w-full">
-              Width:
-              <input
-                type="text"
-                className="grow"
-                placeholder="......."
-                required
-              />
-            </label>
-          </div> */}
-          {/* <label className="input input-bordered flex items-center gap-2 my-2">
-            Phone Number:
-            <input
-              type="number"
-              className="grow"
-              placeholder="......."
-              required
-            />
-          </label>
-          <div className="flex gap-4">
-            <label className="input input-bordered flex items-center gap-2 my-2 w-full">
-              Date of Birth:
-              <input
-                type="date"
-                className="grow"
-                placeholder="......."
-                required
-              />
-            </label>
-            <select
-              className="select input input-bordered flex items-center gap-2 my-2 w-full text-[medium]"
-              defaultValue=""
-              required
-            >
-              <option value="" disabled>
-                Select your Gender
-              </option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-            </select>
-          </div>
-          <select
-            className="select input input-bordered flex items-center gap-2 my-2 w-full text-[medium]"
-            defaultValue=""
-            required
-          >
-            <option value="" disabled>
-              Select your Blood Group
-            </option>
-            <option value="A+">A+</option>
-            <option value="A-">A-</option>
-            <option value="B+">B+</option>
-            <option value="B-">B-</option>
-            <option value="AB+">AB+</option>
-            <option value="AB-">AB-</option>
-            <option value="O+">O+</option>
-            <option value="O-">O-</option>
-          </select> */}
+
           <div className="flex gap-4">
             <label className="input input-bordered flex items-center gap-2 my-2 w-full">
               Password:
@@ -183,9 +148,9 @@ const Register = () => {
               Confirm Password:
               <input
                 type="password"
-                id="confirmPassword"
-                name="confirmPassword"
-                value={formData.confirmPassword}
+                id="confirm_password"
+                name="confirm_password"
+                value={formData.confirm_password}
                 onChange={handleChange}
                 className="grow"
                 placeholder="......."
