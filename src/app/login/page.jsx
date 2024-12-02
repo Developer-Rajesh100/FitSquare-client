@@ -2,6 +2,7 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
+import Cookies from "js-cookie";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -46,11 +47,18 @@ const Login = () => {
 
       const data = await response.json();
       console.log(data);
+      saveTokenUser(data.token, data.user_id);
       toast.success("User Login Successful!");
     } catch (error) {
       console.error("Error:", error.message);
       toast.error("Login Failed, please try again.");
     }
+  };
+
+  // Save token in the browser cookie
+  const saveTokenUser = (token, userID) => {
+    Cookies.set("authToken", token, { expires: 7 }); // Expires in 7 days
+    Cookies.set("uderID", userID, { expires: 7 }); // Expires in 7 days
   };
 
   return (
