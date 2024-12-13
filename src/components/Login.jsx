@@ -30,6 +30,7 @@ const Login = () => {
       confirmPassword: "",
     });
   };
+
   return (
     <div className="flex items-center justify-evenly min-h-screen">
       <div className="">

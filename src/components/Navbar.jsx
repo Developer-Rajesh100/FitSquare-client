@@ -1,7 +1,66 @@
+"use client";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
+import axios from "axios";
+import useAuthStore from "@/context/AuthStore";
+import Image from "next/image";
+import { FaRegUserCircle } from "react-icons/fa";
 
 const Navbar = () => {
+  // Set the initial state of isAuthenticated to false
+  // const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const setIsAuthenticated = useAuthStore((state) => state.setIsAuthenticated);
+
+  const getCookiesData = () => {
+    const token = Cookies.get("authToken");
+    const userID = Cookies.get("userID");
+
+    console.log(token, userID);
+
+    if (token && userID) {
+      setIsAuthenticated(true);
+    }
+  };
+
+  useEffect(() => {
+    getCookiesData();
+  }, []);
+
+  // Logout function to remove the cookies and set the isAuthenticated state to false
+  const logout = async () => {
+    const authToken = Cookies.get("authToken");
+
+    if (!authToken) {
+      console.error("No authToken found! User might already be logged out.");
+      return;
+    }
+
+    try {
+      const options = {
+        headers: {
+          Authorization: `token ${authToken}`,
+        },
+      };
+
+      const response = await fetch(
+        "http://127.0.0.1:8000/member/user/logout/",
+        options
+      );
+      const data = await response.json();
+      console.log("Success:", data);
+
+      Cookies.remove("authToken");
+      Cookies.remove("userID");
+      setIsAuthenticated(false);
+      toast.success("User Logged out successfully");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div>
       <div className="navbar bg-slate-300 shadow-sm">
@@ -30,12 +89,16 @@ const Navbar = () => {
               <li>
                 <Link href={"/"}>Home</Link>
               </li>
-              <li>
-                <Link href={"/registration"}>Registration</Link>
-              </li>
-              <li>
-                <Link href={"/login"}>Login</Link>
-              </li>
+              {!isAuthenticated && (
+                <>
+                  <li>
+                    <Link href={"/registration"}>Registration</Link>
+                  </li>
+                  <li>
+                    <Link href={"/login"}>Login</Link>
+                  </li>
+                </>
+              )}
             </ul>
           </div>
           <Link href={"/"} className="btn btn-ghost text-xl">
@@ -47,12 +110,16 @@ const Navbar = () => {
             <li>
               <Link href={"/"}>Home</Link>
             </li>
-            <li>
-              <Link href={"/registration"}>Registration</Link>
-            </li>
-            <li>
-              <Link href={"/login"}>Login</Link>
-            </li>
+            {!isAuthenticated && (
+              <>
+                <li>
+                  <Link href={"/registration"}>Registration</Link>
+                </li>
+                <li>
+                  <Link href={"/login"}>Login</Link>
+                </li>
+              </>
+            )}
           </ul>
         </div>
         <div className="navbar-end pr-5">
@@ -74,9 +141,13 @@ const Navbar = () => {
               <li>
                 <Link href={"/staff_panel"}>Staff Panel</Link>
               </li>
-              <li>
-                <a>Logout</a>
-              </li>
+              {isAuthenticated && (
+                <li>
+                  <Link onClick={logout} href={"/"}>
+                    Logout
+                  </Link>
+                </li>
+              )}
             </ul>
           </div>
         </div>

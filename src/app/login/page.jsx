@@ -1,10 +1,12 @@
 "use client";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
+import useAuthStore from "@/context/AuthStore";
 
 const Login = () => {
+  const setIsAuthenticated = useAuthStore((state) => state.setIsAuthenticated);
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -31,6 +33,8 @@ const Login = () => {
   };
 
   // Login POST Request to the server http://127.0.0.1:8000/member/user/login/
+  /*
+
   const loginUser = async () => {
     try {
       const response = await fetch("http://127.0.0.1:8000/member/user/login/", {
@@ -46,8 +50,10 @@ const Login = () => {
       }
 
       const data = await response.json();
+
       console.log(data);
       saveTokenUser(data.token, data.user_id);
+      setIsAuthenticated(true);
       toast.success("User Login Successful!");
     } catch (error) {
       console.error("Error:", error.message);
@@ -55,10 +61,38 @@ const Login = () => {
     }
   };
 
+  */
+
+  const loginUser = () => {
+    fetch("http://127.0.0.1:8000/member/user/login/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        saveTokenUser(data.token, data.user_id);
+        setIsAuthenticated(true);
+        toast.success("User Login Successful!");
+      })
+      .catch((error) => {
+        console.error("Error:", error.message);
+        toast.error("Login Failed, please try again.");
+      });
+  };
+
   // Save token in the browser cookie
   const saveTokenUser = (token, userID) => {
     Cookies.set("authToken", token, { expires: 7 }); // Expires in 7 days
-    Cookies.set("uderID", userID, { expires: 7 }); // Expires in 7 days
+    Cookies.set("userID", userID, { expires: 7 }); // Expires in 7 days
   };
 
   return (
