@@ -44,14 +44,7 @@ const Navbar = () => {
           Authorization: `token ${authToken}`,
         },
       };
-
-      const response = await fetch(
-        "http://127.0.0.1:8000/member/user/logout/",
-        options
-      );
-      const data = await response.json();
-      console.log("Success:", data);
-
+      await axios.get("http://127.0.0.1:8000/member/user/logout/", options);
       Cookies.remove("authToken");
       Cookies.remove("userID");
       setIsAuthenticated(false);

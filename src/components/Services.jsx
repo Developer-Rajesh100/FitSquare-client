@@ -1,37 +1,89 @@
-import React from "react";
+"use client";
+import axios from "axios";
+import Image from "next/image";
+import React, { useEffect, useState } from "react";
+import { MdCurrencyRupee } from "react-icons/md";
 
 const Services = () => {
+  // Fetching Services Data from API http://127.0.0.1:8000/membership/ and storing it in services state
+  const [services, setServices] = useState([]);
+
+  // Fetching Services Data from API using axios
+  useEffect(() => {
+    axios
+      .get("http://127.0.0.1:8000/membership/")
+      .then((res) => {
+        console.log(res.data);
+        setServices(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  // First 15 words of description
+  const first5Words = (str) => {
+    return str.split(" ").slice(0, 15).join(" ");
+  };
+
   return (
-    <div className="max-w-[75%] mx-auto my-20">
+    <section className="max-w-[75%] mx-auto my-20">
       <h1 className="text-center text-4xl font-medium">
         This is Services Section
       </h1>
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci id
-        nisi necessitatibus unde dolorem aut est, illo, placeat atque in tempore
-        dicta deserunt officiis? Rem voluptatibus, esse maiores aliquam, eius
-        corrupti alias fugiat nihil quas atque tenetur eaque quidem a est
-        aliquid natus eos iusto non illo reiciendis quasi obcaecati voluptate
-        fuga. Quibusdam commodi minus pariatur! Deserunt quia quam deleniti
-        error quidem exercitationem, totam et perspiciatis quisquam quis quos
-        aliquid nostrum. Excepturi, aliquam accusantium nisi, consequuntur
-        deleniti quidem magnam obcaecati delectus quia, eveniet repellendus non
-        beatae. Minima, a nobis harum voluptatibus cum molestiae consectetur
-        tempora magni quis. Est nesciunt consequatur eaque reiciendis tenetur,
-        ex aspernatur veritatis adipisci dolores. Dignissimos distinctio qui
-        illo est ullam nisi, obcaecati doloremque? Non corporis soluta minus
-        porro necessitatibus harum? Rem nemo nihil porro quod nostrum laboriosam
-        laudantium dignissimos, tenetur inventore sit atque. Facere
-        exercitationem sequi cumque dolor velit impedit mollitia doloribus odit
-        repellendus excepturi, culpa deserunt voluptates. Asperiores possimus
-        atque veritatis consectetur officia quasi odit corrupti? Eum possimus,
-        voluptatem quidem dignissimos dolor officiis nam laudantium ea! Sint vel
-        quasi commodi inventore deserunt aspernatur pariatur quas quibusdam
-        provident? Voluptatibus odio odit eligendi sapiente inventore dolorem
-        obcaecati, atque illum voluptates! Et, maiores numquam deleniti
-        assumenda mollitia iure?
-      </p>
-    </div>
+      <div>
+        <div className="flex justify-center items-center gap-10">
+          {services.map((service, index) => (
+            <div key={index} className="card bg-base-100 w-96 shadow-xl">
+              <figure>
+                <img src={service.image} className="" alt={service.title} />
+                {/* <Image src={service.image} height={200} width={200} alt={service.title} /> */}
+              </figure>
+              <div className="card-body">
+                <h2 className="card-title">
+                  {service.title}
+                  <div className="badge badge-secondary">
+                    {" "}
+                    {parseInt(service.discount)}% off{" "}
+                  </div>
+                </h2>
+                <p>{first5Words(service.description)}.....</p>
+                <div className="card-actions justify-end">
+                  <div className="badge badge-outline p-3">
+                    {" "}
+                    <MdCurrencyRupee /> {parseInt(service.price)}
+                  </div>
+                  <div className="badge badge-outline p-3">
+                    {" "}
+                    Validity {service.validity} Days{" "}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+
+          {/* <div className="card bg-base-100 w-96 shadow-xl">
+          <figure>
+            <img
+              src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+              alt="Shoes"
+            />
+          </figure>
+          <div className="card-body">
+            <h2 className="card-title">
+              Shoes!
+              <div className="badge badge-secondary">NEW</div>
+            </h2>
+            <p>If a dog chews shoes whose shoes does he choose?</p>
+            <div className="card-actions justify-end">
+              <div className="badge badge-outline">Fashion</div>
+              <div className="badge badge-outline">Products</div>
+            </div>
+          </div>
+        </div> */}
+        </div>
+      </div>
+    </section>
   );
 };
 
