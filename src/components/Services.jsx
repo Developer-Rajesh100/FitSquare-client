@@ -27,8 +27,8 @@ const Services = () => {
   };
 
   return (
-    <section className="max-w-[75%] mx-auto my-20">
-      <h1 className="text-center text-4xl font-medium">
+    <section id="services" className="max-w-[75%] mx-auto my-20">
+      <h1 className="text-center text-4xl font-medium my-12">
         This is Services Section
       </h1>
       <div>

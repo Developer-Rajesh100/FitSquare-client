@@ -82,6 +82,9 @@ const Navbar = () => {
               <li>
                 <Link href={"/"}>Home</Link>
               </li>
+              <li>
+                <Link href={"/#services"}>Services</Link>
+              </li>
               {!isAuthenticated && (
                 <>
                   <li>
@@ -102,6 +105,9 @@ const Navbar = () => {
           <ul className="menu menu-horizontal px-1">
             <li>
               <Link href={"/"}>Home</Link>
+            </li>
+            <li>
+              <Link href={"/#services"}>Services</Link>
             </li>
             {!isAuthenticated && (
               <>
